@@ -8,7 +8,7 @@ Original Game: Purble Place
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
-#include "ntdll_private_imports.h"
+#include "ext/ntdll_private_imports.h"
 #include "sqmtimerecorder.h"
 
 CSQMTimeRecorder::~CSQMTimeRecorder()
