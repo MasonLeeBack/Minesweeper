@@ -16,7 +16,7 @@ Original Game: Purble Place
 #include "logger.h"
 #include "textureloader.h"
 
-HRESULT CreateTextureFromFileInMemory(
+HRESULT TextureLoader::CreateTextureFromFileInMemory(
   IDirect3DDevice9* pDevice,
   const void* pData, void* Src,
   IDirect3DTexture9** pTexture,
