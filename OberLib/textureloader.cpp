@@ -12,7 +12,6 @@ Original Game: Purble Place
 
 #include <stdint.h>
 #include "ext/dds.h"
-
 #include "logger.h"
 #include "textureloader.h"
 

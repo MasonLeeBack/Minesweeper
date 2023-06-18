@@ -1,0 +1,405 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Board.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UIBoardCanvas.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UITile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\access_node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\access_userinterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\animationdescriptor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\audio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\bitmapfont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\engine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\event.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\gameaudio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\handle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\hresult.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\materialadditive.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\materialalpha.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\materialcreation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\materialstructs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\nodebase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\nodebutton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\nodeemitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\nodelabel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\nodenumber.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\nodeshot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\nodesprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\oberstatusbar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\obervfs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\particle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\rendercaps.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\rendermanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\resourceanimation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\resourcebase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\resourcemanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\resourcesound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\resourcetexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\resourcetexturedyn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\resourcewav.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\resourcewma.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\savefs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\textrenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\timekeeping.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\tip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\tipmanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\userinterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberEngine\xmlmanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberLib\cabinet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberLib\commoncontroller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberLib\dialoghelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberLib\dllfilemgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberLib\localize.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberLib\logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberLib\serializabledata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberLib\shareddialogs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberLib\sqmtimerecorder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberLib\str.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberLib\textureloader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberLib\thread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberLib\xmlnode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OberLib\utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SerialXML.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MSLog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Minesweeper_const.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Minesweeper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HighScore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStats.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UIDialogs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Board.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIBoardCanvas.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UITile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\audio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\hresult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\nodebase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\resourcebase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\resourcemanager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\tip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\xmlmanager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberLib\array.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberLib\cabinet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberLib\commoncontroller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberLib\localize.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberLib\logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberLib\oberlib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberLib\serializabledata.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberLib\shareddialogs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberLib\sqmtimerecorder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberLib\str.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberLib\textureloader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberLib\thread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberLib\xmlnode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberLib\ext\dds.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberLib\ext\ntdll_private_imports.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\resourceanimation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\animationdescriptor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\resourcesound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\resourcetexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\resourcetexturedyn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\resourcewav.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\resourcewma.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\timekeeping.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\rendercaps.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberLib\sortedlistw.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberLib\utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberLib\sortedlist.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIDialogs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStats.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HighScore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Minesweeper_const.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MSLog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SerialXML.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\rendermanager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\userinterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\materialalpha.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\materialadditive.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="oberengine\material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="oberengine\materialcreation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="oberengine\materialstructs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OberEngine\nodenumber.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OberEngine\packages.config" />
+  </ItemGroup>
+</Project>
