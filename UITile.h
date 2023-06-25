@@ -7,6 +7,8 @@ Minesweeper Decompilation
 #ifndef _UITILE_H_
 #define _UITILE_H_
 
+#include "UIBoardCanvas.h"
+
 #include <OberEngine/event.h>
 #include <OberEngine/nodesprite.h>
 
@@ -16,6 +18,7 @@ enum ETileStatus {
 
 class UITile : public IEventListener {
 private:
+  // All static variables
   static bool _bothButtonsWereDown;
   static bool _mouseDownWasCanceled;
 
@@ -37,17 +40,17 @@ private:
 
   static UITile* _mouseDragNode;
 
-  static NodeBase* _pExplosionAnimatedSpriteBase;
-  static NodeBase* _pDisarmAnimatedSpriteBase;
-  static NodeBase* _pHighlightSpriteBase;
-  static NodeBase* _pTopSpriteBase;
-  static NodeBase* _pFlagSpriteBase;
-  static NodeBase* _pMineSpriteBase;
-  static NodeBase* _pBadGuessSpriteBase;
-  static NodeBase* _pQuestionMarkSpriteBase;
-  static NodeBase* _pNumberSpriteBase;
-  static NodeBase* _pUpperShadowBase;
-  static NodeBase* _pLeftShadowBase;
+  static NodeSprite* _pExplosionAnimatedSpriteBase;
+  static NodeSprite* _pDisarmAnimatedSpriteBase;
+  static NodeSprite* _pHighlightSpriteBase;
+  static NodeSprite* _pTopSpriteBase;
+  static NodeSprite* _pFlagSpriteBase;
+  static NodeSprite* _pMineSpriteBase;
+  static NodeSprite* _pBadGuessSpriteBase;
+  static NodeSprite* _pQuestionMarkSpriteBase;
+  static NodeSprite* _pNumberSpriteBase;
+  static NodeSprite* _pUpperShadowBase;
+  static NodeSprite* _pLeftShadowBase;
   static NodeBase* _pShadowLayerContainer;
   static NodeBase* _pLabelLayerContainer;
   static NodeBase* _pTopLayerContainer;
@@ -60,11 +63,69 @@ private:
   static Array<NodeSprite*> _backSpriteRowBases;
   static Array<NodeSprite*> _accessibilityGroups;
 
+  // All member variables
+  NodeSprite* m_Highlight;
+  NodeSprite* m_Top;
+  NodeSprite* m_FocusNode;
+  NodeSprite* m_ExplostionAnimationBase;
+  NodeSprite* m_DisarmAnimationBase;
+
+  int m_Column;
+  int m_Row;
+
+  int field_20;
+
+  bool m_bTopVisible;
+
+  UIBoardCanvas* m_Canvas;
+
+  NodeSprite* m_Mine;
+  NodeSprite* m_Flag;
+  NodeSprite* m_BadGuess;
+  NodeSprite* m_QuestionMark;
+  NodeSprite* m_Number;
+  NodeSprite* m_UpperShadow;
+  NodeSprite* m_LeftShadow;
+
+  bool field_48;
+
+  int m_InvalidMoveAnimationId;
+  int m_ExplosionAnimationId;
+  int m_DisarmAnimationId;
+  int m_AlphaFadeInAnimationId;
+
 public:
 
   void ClearRumble();
   void StartRumble(bool bLeftRumble);
   void EndRumble(bool bLeftRumble);
+
+  bool IsNumberVisible();
+
+  void QuickFadeOutFlag();
+
+  void StartDisarmAnimation();
+  void RemoveDisarmAnimation();
+  void StartExplosionAnimation();
+  void RemoveExplosionAnimation();
+  void StartInvalidMoveAnimation();
+  void RemoveInvalidMoveAnimation();
+
+  NodeSprite* ShowBadGuess();
+  void RemoveBadGuess();
+  NodeSprite* ShowFlag();
+  void RemoveFlag();
+  NodeSprite* ShowMine();
+  void RemoveMine();
+  NodeSprite* ShowNumber(ETileStatus status);
+  void RemoveNumber();
+  NodeSprite* ShowQuestionMark();
+  void RemoveQuestionMark();
+
+  NodeSprite* ShowLeftShadow(int a1);
+  void RemoveLeftShadow();
+  NodeSprite* ShowUpperShadow(int a1);
+  void RemoveUpperShadow();
 
 };
 
