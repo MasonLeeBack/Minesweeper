@@ -28,6 +28,8 @@ public:
   void FreeExtra();
   void Reserve(unsigned int Size);
   void Insert(unsigned int index, T item);
+
+  bool FindRemove(T item);
   unsigned int Remove(unsigned int index);
 };
 
@@ -157,6 +159,20 @@ inline void Array<T>::Insert(unsigned int index, T item)
   for (i = this->count - 1; i > index; *v8 = *(v8 - 1))
     v8 = &this->field_C[i--];
   this->field_C[index] = item;
+}
+
+template<typename T>
+inline bool Array<T>::FindRemove(T item)
+{
+  int index;
+
+  index = Find(item);
+  if (index == -1)
+    return false;
+
+  Remove(index);
+
+  return true;
 }
 
 template<typename T>
