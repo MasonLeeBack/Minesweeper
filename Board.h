@@ -29,9 +29,9 @@ public:
   int var_64;
   int var_68;
 
-  class Array<TileAnimationInfo*> BoardAnimations;
-  class Array<int*> BoardTiles;
-  class Arrau<int*> BoardMines;
+  Array<TileAnimationInfo*> BoardAnimations;
+  Array<UITile*> BoardTiles;
+  Array<UITile*> BoardMines;
 
   int GetMineableTileCount(int a1, int a2);
   int AttemptReveal(int x, int y);
