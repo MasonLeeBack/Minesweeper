@@ -5,7 +5,67 @@ Minesweeper Decompilation
 */
 
 #include "UITile.h"
+#include "Game.h"
 #include <OberLib/commoncontroller.h>
+
+void UITile::DestroyBaseNodes()
+{
+  _pLeftShadowBase->DeleteSelf();
+  _pUpperShadowBase->DeleteSelf();
+  _pTopSpriteBase->DeleteSelf();
+  _pHighlightSpriteBase->DeleteSelf();
+  _pFlagSpriteBase->DeleteSelf();
+  _pMineSpriteBase->DeleteSelf();
+  _pBadGuessSpriteBase->DeleteSelf();
+  _pQuestionMarkSpriteBase->DeleteSelf();
+  _pNumberSpriteBase->DeleteSelf();
+  _pExplosionAnimatedSpriteBase->DeleteSelf();
+  _pDisarmAnimatedSpriteBase->DeleteSelf();
+  _pTopLayerContainer->DeleteSelf();
+  _pShadowLayerContainer->DeleteSelf();
+  _pLabelLayerContainer->DeleteSelf();
+  _pHighlightLayerContainer->DeleteSelf();
+  _pFlagLayerContainer->DeleteSelf();
+  _pXLayerContainer->DeleteSelf();
+  _pAnimLayerContainer->DeleteSelf();
+  for (unsigned int i = 0; i < _backContainerRows.count; ++i) {
+    _backContainerRows.field_C[i]->DeleteSelf();
+    _backSpriteRowBases.field_C[i]->DeleteSelf();
+  }
+  _backContainerRows.count = 0;
+  _backSpriteRowBases.count = 0;
+  _accessibilityGroups.count = 0;
+}
+
+void UITile::SetHighlight(bool bVisible)
+{
+  m_Highlight->SetVisible(bVisible);
+}
+
+void UITile::HandleEsc()
+{
+  UIBoardCanvas* canvas;
+
+  if (_mouseDragNode || _bothButtonsWereDown)
+  {
+    _mouseDragNode = NULL;
+    _bothButtonsWereDown = false;
+    _mouseDownWasCanceled = true;
+
+    canvas = g_Game->canvas;
+    if (!canvas)
+      SharedDialogs::FatalDialog::Show(0);
+
+    canvas->UpdateSecondaryRevealPreview(0);
+    canvas->MakeAllTilesDirty();
+    canvas->ShowTopsOnAllCoveredSquaresExcept(0);
+
+    if (g_Game->bUserPrefersKeyboard == false) {
+      g_pUserInterface->SetFocus(0);
+      g_pUserInterface->ProcessMouseMove(1);
+    }
+  }
+}
 
 void UITile::ClearRumble()
 {
@@ -75,6 +135,53 @@ void UITile::QuickFadeOutFlag()
   if (m_Flag) {
     animationID = m_Flag->AddAnimation(_alphaQuickFadeOutAnimationId, 0);
     m_Flag->ResumeAnimation(animationID);
+  }
+}
+
+void UITile::RemoveDisarmAnimation()
+{
+  if (m_DisarmAnimationBase) {
+    m_DisarmAnimationBase->RemoveListener(this);
+    m_DisarmAnimationBase->DeleteSelf();
+    m_DisarmAnimationBase = NULL;
+    m_DisarmAnimationId = 0;
+  }
+}
+
+void UITile::RemoveExplosionAnimation()
+{
+  if (m_ExplosionAnimationBase) {
+    m_ExplosionAnimationBase->RemoveListener(this);
+    m_ExplosionAnimationBase->DeleteSelf();
+    m_ExplosionAnimationBase = NULL;
+    m_ExplosionAnimationId = 0;
+  }
+}
+
+void UITile::StartInvalidMoveAnimation()
+{
+  NodeSprite* badGuessSprite;
+
+  if (m_InvalidMoveAnimationId)
+    RemoveInvalidMoveAnimation();
+
+  badGuessSprite = ShowBadGuess();
+
+  m_InvalidMoveAnimationId = badGuessSprite->AddAnimation(_alphaQuickPulseAnimationId, 0);
+
+  badGuessSprite->ResumeAnimation(m_InvalidMoveAnimationId);
+  badGuessSprite->AddListener(this);
+}
+
+void UITile::RemoveInvalidMoveAnimation()
+{
+  if (m_InvalidMoveAnimationId) {
+    if (m_BadGuess) {
+      m_BadGuess->StopAnimation(m_InvalidMoveAnimationId);
+      m_BadGuess->RemoveListener(this);
+      RemoveBadGuess();
+      m_InvalidMoveAnimationId = 0;
+    }
   }
 }
 

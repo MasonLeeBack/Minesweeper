@@ -7,8 +7,10 @@ Minesweeper Decompilation
 #include "Game.h"
 #include "Board.h"
 #include "UIBoardCanvas.h"
-#include "OberLib/str.h"
 #include <time.h>
+
+#include <OberLib/str.h>
+#include <OberEngine/rendermanager.h>
 
 Game* g_Game = NULL;
 const wchar_t* gameXml = L"UI\Minesweeper.xml";
@@ -17,7 +19,7 @@ int g_RandomSeed;
 
 bool Game::CanSetAnimationsEnabled()
 {
-  return !g_pRenderManager->ISRGBRast();
+  return !g_pRenderManager->IsRGBRast();
 }
 
 void Game::RandomizeSeedOnTime()
@@ -117,6 +119,18 @@ void Game::SetSoundEnabled(bool bEnabled)
   CacheSounds();
 }
 
+void Game::SetTimerEnabled(bool bEnabled)
+{
+  if (bTimerEnabled != bEnabled) {
+    bTimerEnabled = bEnabled;
+
+    if (bEnabled)
+      Engine_RegisterSecondTimer(OnSecondElapsed);
+    else
+      Engine_RegisterSecondTimer(NULL);
+  }
+}
+
 void Game::SetUserOptionSoundEnabled(bool bEnabled)
 {
   bSoundEnabled = bEnabled;
@@ -179,6 +193,30 @@ void Game::freeGameRes(bool bFreeScene)
 #error todo
     }
   }
+}
+
+bool Game::InitUi()
+{
+  bool result;
+
+  g_iMinesweeperFudge = true;
+  Engine_SetBackMode(1, 0, 1);
+  CreateScene();
+  canvas = new UIBoardCanvas();
+
+  result = canvas->Initialize();
+  if (result) {
+    wchar_t* local = LocalizeMessage(L"|54922|ACC|Minesweeper//accessibility root node name");
+    g_pRenderManager->m_BaseNode->SetAccessName(local);
+    LocalFree(local);
+    RequestSetState(GAMESTATE_PLAYING);
+    canvas->Refresh(true);
+    CacheSounds();
+
+    result = true;
+  }
+
+  return result;
 }
 
 bool Game::IsReadyForInput()

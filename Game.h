@@ -64,7 +64,7 @@ public:
 
   int bReadyForInput; // 216
 
-  int bTimerEnabled; // 218
+  bool bTimerEnabled; // 218
 
   void PlaySound(ESound sound, int volume);
   bool CanSetAnimationsEnabled();
@@ -80,6 +80,7 @@ public:
   void CreateScene();
   void SetTipsEnabled(bool bEnabled);
   void SetSoundEnabled(bool bEnabled);
+  void SetTimerEnabled(bool bEnabled);
   void SetUserOptionSoundEnabled(bool bEnabled);
   bool GetClientAreaAnimation();
   void RequestSetState(EGameState state);

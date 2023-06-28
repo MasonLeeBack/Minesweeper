@@ -26,3 +26,8 @@ void Board::ResetBoard()
   RandSeed = 0;
   freeRes();
 }
+
+Board::~Board()
+{
+  freeRes();
+}

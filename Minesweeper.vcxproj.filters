@@ -398,8 +398,12 @@
     <ClInclude Include="OberEngine\nodenumber.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="oberengine\nodesprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="OberEngine\packages.config" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

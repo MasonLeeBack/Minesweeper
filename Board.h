@@ -39,6 +39,7 @@ public:
   void ResetBoard();
 
   Board(int difficulty, int width, int height, int totalMines, int seed, int firstclickx, int firstclicky, bool placeMines);
+  ~Board();
 };
 
 #endif // _BOARD_H_

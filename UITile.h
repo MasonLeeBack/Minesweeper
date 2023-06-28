@@ -12,6 +12,12 @@ Minesweeper Decompilation
 #include <OberEngine/event.h>
 #include <OberEngine/nodesprite.h>
 
+#include <d3dx9.h>
+
+class UITileConstructionInfo {
+  
+};
+
 enum ETileStatus {
 
 };
@@ -67,7 +73,7 @@ private:
   NodeSprite* m_Highlight;
   NodeSprite* m_Top;
   NodeSprite* m_FocusNode;
-  NodeSprite* m_ExplostionAnimationBase;
+  NodeSprite* m_ExplosionAnimationBase;
   NodeSprite* m_DisarmAnimationBase;
 
   int m_Column;
@@ -95,6 +101,11 @@ private:
   int m_AlphaFadeInAnimationId;
 
 public:
+
+  void DestroyBaseNodes();
+
+  void SetHighlight(bool bHighlight);
+  void HandleEsc();
 
   void ClearRumble();
   void StartRumble(bool bLeftRumble);
