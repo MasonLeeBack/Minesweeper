@@ -15,6 +15,7 @@ class CommonController
 private:
   HWND hWnd;
 public:
+  CommonController(HWND, bool, struct IControllerInterface*);
 
   bool Poll();
 };

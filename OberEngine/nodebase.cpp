@@ -1,14 +1,20 @@
 /*
 
 OberEngine Decompilation
-Original Game: Purble Place
+
+File name:
+  nodebase.cpp
 
 */
 
+#include "stdafx.h"
 #include "nodebase.h"
+
+#include <localize.h>
+#include <logger.h>
+#include "animationdescriptor.h"
 #include "rendermanager.h"
 #include "userinterface.h"
-#include <OberLib/localize.h>
 
 unsigned int NodeBase::GetTabIndex()
 {
@@ -48,10 +54,10 @@ void NodeBase::HideTip(bool bHide)
     m_Tip->Close(bHide);
 }
 
-void NodeBase::SetAnimationReverse(bool bReversed)
+void NodeBase::SetAnimationReverse(unsigned int animationID, bool bReversed)
 {
   AnimationState* state;
-  if (m_AnimationStates->TryGet(animationID, &state))
+  if (m_AnimationStates.TryGet(animationID, &state))
   {
     state->SetReverse(bReversed);
   }
@@ -63,7 +69,7 @@ void NodeBase::SetAnimationReverse(bool bReversed)
 void NodeBase::SetAnimationTime(unsigned int animationID, float time)
 {
   AnimationState* state;
-  if (m_AnimationStates->TryGet(animationID, &state))
+  if (m_AnimationStates.TryGet(animationID, &state))
   {
     state->SetTime(time);
   }
@@ -77,10 +83,24 @@ void NodeBase::SetAnimationTimeToEnd(unsigned int animationID)
   SetAnimationTime(animationID, 99999.0f);
 }
 
+AnimationState* NodeBase::GetAnimationState(unsigned int animationID)
+{
+  AnimationState* state;
+
+  if (m_AnimationStates.TryGet(animationID, &state)) {
+    return state;
+  }
+  else {
+    LOG(200, L"Cannot get non existing animation: %d (type : %d)", animationID, GetHandleType(animationID));
+  }
+
+  return NULL;
+}
+
 void NodeBase::StopAnimation(unsigned int animationID)
 {
   AnimationState* state;
-  if (m_AnimationStates->TryGet(animationID, &state))
+  if (m_AnimationStates.TryGet(animationID, &state))
   {
     state->SetPlaying(false);
   }
@@ -225,7 +245,7 @@ bool NodeBase::TreeVisible()
 void NodeBase::UpdateChildren(float timeDelta)
 {
   for (unsigned int i = 0; i < m_Children.count; ++i) {
-    m_Children.field_C[i]->Update(timeDelta);
+    m_Children.data[i]->Update(timeDelta);
   }
 }
 
@@ -233,16 +253,31 @@ void NodeBase::UpdateZero()
 {
   UpdateCurrentPositions();
   for (unsigned int i = 0; i < m_Children.count; ++i) {
-    m_Children.field_C[i]->UpdateZero();
+    m_Children.data[i]->UpdateZero();
   }
+}
+
+void NodeBase::HandleEvent(Event* event)
+{
+/*
+  unsigned int v3; // edi
+  NodeBase *v4; // ecx
+
+  v3 = 0;
+  for ( *((_DWORD *)a2 + 1) = this; v3 < this->m_EventListeners.count; ++v3 )
+  {
+    v4 = this->m_EventListeners.data[v3];
+    (*(void (__thiscall **)(NodeBase *, struct Event *))v4->vtabl)(v4, a2);
+  }
+*/
 }
 
 void NodeBase::HandleEventRecursive(Event* event)
 {
   HandleEvent(event);
-  if (unsigned int i = 0; i < m_Children.count; ++i)
+  for (unsigned int i = 0; i < m_Children.count; ++i)
   {
-    m_Children.field_C[i]->HandleEventRecursive(event);
+    m_Children.data[i]->HandleEventRecursive(event);
   }
 }
 
@@ -252,20 +287,20 @@ NodeBase* NodeBase::GetChild(unsigned int index)
     return NULL;
   }
   else {
-    return m_Children.field_C[index];
+    return m_Children.data[index];
   }
 }
 
 void NodeBase::DeleteChild(NodeBase* node)
 {
-  unsigned int j;
+  unsigned int j = 0;
   if (m_Children.count != 0) {
-    for (NodeBase** i = m_Children.field_C; *i != node; ++i) {
+    for (NodeBase** i = m_Children.data; *i != node; ++i) {
       if (++j >= m_Children.count)
         return;
     }
-    g_pUserInterface->AddToDeleteList(m_Children.field_C[j]);
-    m_Children.field_C[j]->m_EventListeners.count = 0;
+    g_pUserInterface->AddToDeleteList(m_Children.data[j]);
+    m_Children.data[j]->m_EventListeners.count = 0;
     m_Children.Remove(j);
   }
 }
@@ -278,8 +313,8 @@ void NodeBase::DeleteSelf()
 void NodeBase::RenderChildren(unsigned int renderLayer)
 {
   for (unsigned int i = 0; i < m_Children.count; ++i) {
-    if (!m_Children.field_C[i]) {
-      m_Children.field_C[i]->Render(renderLayer);
+    if (!m_Children.data[i]) {
+      m_Children.data[i]->Render(renderLayer);
     }
   }
 }
@@ -305,11 +340,11 @@ bool NodeBase::IsDescendantOf(NodeBase* node)
 
 void NodeBase::ImportNode(NodeBase* node)
 {
-  int index;
+  unsigned int index = 0;
   NodeBase* nodeParent;
 
   if (m_Children.count != 0) {
-    for (auto i = m_Children.field_C; *i != node; ++i) {
+    for (auto i = m_Children.data; *i != node; ++i) {
       if (++index >= m_Parent->m_Children.count)
         return;
     }
@@ -365,6 +400,31 @@ bool NodeBase::Load(XmlNode* xmlNode)
   return true;
 }
 
+NodeBase* NodeBase::CreateNode(unsigned int* nodeType)
+{
+  *nodeType = NODEBASE_TYPE;
+
+  NodeBase* newNode = new NodeBase();
+  return newNode;
+}
+
+void NodeBase::RegisterNodeType(const wchar_t* name, CreateFunction createFunction)
+{
+  RegisteredType type;
+
+  wcsncpy_s(&type.m_Name[0], 20, name, 0xFFFFFFFF);
+  type.m_CreateFunction = createFunction;
+
+  m_TypeList.Add(type);
+}
+
+void NodeBase::Register()
+{
+  RegisterNodeType(L"Base", CreateNode);
+  memset(&m_RenderLayerNodeCount, 0, 24);
+  m_RenderLayerNodeCountInitialized = true;
+}
+
 int NodeBase::GetRenderLayerIsUsed(unsigned int renderLayer)
 {
   return (&m_RenderLayerNodeCount)[renderLayer] != 0;
@@ -372,14 +432,14 @@ int NodeBase::GetRenderLayerIsUsed(unsigned int renderLayer)
 
 void NodeBase::GetLayoutLocation(int& x, int& y)
 {
-  g_UserInterface->UpdateLayout();
+  g_pUserInterface->UpdateLayout();
   x = m_LayoutLocationX;
   y = m_LayoutLocationY;
 }
 
 void NodeBase::GetLayoutSize(unsigned int& x, unsigned int& y)
 {
-  g_UserInterface->UpdateLayout();
+  g_pUserInterface->UpdateLayout();
   x = m_LayoutSizeX - m_LayoutLocationX;
   y = m_LayoutSizeY - m_LayoutLocationY;
 }
@@ -494,11 +554,11 @@ void NodeBase::AddListener(IEventListener* listener)
 
 void NodeBase::RemoveListener(IEventListener* listener)
 {
-  unsigned int i;
+  unsigned int i = 0;
   IEventListener** j;
 
   if (m_EventListeners.count != 0) {
-    j = m_EventListeners.field_C;
+    j = m_EventListeners.data;
 
     while (*j != listener)
     {

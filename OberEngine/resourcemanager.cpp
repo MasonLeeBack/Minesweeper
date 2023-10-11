@@ -1,13 +1,26 @@
+/*
+
+OberEngine Decompilation
+
+File name:
+  resourcemanager.cpp
+
+*/
 
 #include "stdafx.h"
+#include "resourcemanager.h"
+
+#include <string.h>
+#include <logger.h>
+#include "xmlmanager.h"
 
 bool ResourceManager::Initialize()
 {
   XmlNode* xmlFile;
 
-  if (!wszCache) {
-    wszCache = new wchar_t[100];
-    CacheCch = 50;
+  if (!ResourceBase::wszCache) {
+    ResourceBase::wszCache = new wchar_t[100];
+    ResourceBase::CacheCch = 50;
   }
 
   xmlFile = g_pXmlManager->GetXml(L"SplitList.xml");
@@ -17,7 +30,8 @@ bool ResourceManager::Initialize()
   }
 
   int j, k;
-  for (XmlNode* i = xmlFile->XPathElementSearch(L"/Texture", &j); k < j; k++)
+  XmlNode* i;
+  for (i = xmlFile->XPathElementSearch(L"/Texture", &j); k < j; k++)
   {
     wchar_t* name = i[k].XPathAttributeSearchSingle(L"./@name");
     wchar_t* width = i[k].XPathAttributeSearchSingle(L"./@width");
@@ -25,13 +39,28 @@ bool ResourceManager::Initialize()
 
     if (name)
     {
+      tagPOINT res;
+      res.x = wcstol(width, 0, 0);
+      res.y = wcstol(height, 0, 0);
 
+      textureDimensions.Add(name, res);
     }
 
     delete[] name;
     delete[] width;
     delete[] height;
   }
+  delete[] i;
 
   return true;
+}
+
+void ResourceManager::Cleanup()
+{
+
+  if (ResourceBase::wszCache) {
+    delete[] ResourceBase::wszCache;
+    ResourceBase::wszCache = 0;
+    ResourceBase::CacheCch = 0;
+  }
 }

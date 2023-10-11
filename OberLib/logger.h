@@ -9,6 +9,5 @@ Original Game: Purble Place
 #define _OBERLIB_LOGGER_H_
 
 #define LOG(severity, message, ...) 
-#pragma error
 
 #endif // _OBERLIB_LOGGER_H_

@@ -12,12 +12,11 @@ Original Game: Purble Place
 
 class Str
 {
-private:
+public:
   size_t m_iLength; // 0
   size_t m_iCount; // 1
   wchar_t* m_pStr; // 2
 
-public:
   Str(Str* other);
   Str(const wchar_t* other);
   Str(wchar_t* Source, size_t Length);

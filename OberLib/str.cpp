@@ -285,7 +285,7 @@ void Str::Clear()
 
 size_t Str::Format(wchar_t* Format, ...)
 {
-  int count;        // Variable to hold the count of characters needed for the formatted string
+  size_t count;        // Variable to hold the count of characters needed for the formatted string
   va_list ArgList;  // Variable to hold the argument list
 
   // Start processing the variable argument list

@@ -1,7 +1,9 @@
 /*
 
 OberEngine Decompilation
-Original Game: Purble Place
+
+File name:
+  resourcebase.h
 
 */
 
@@ -12,7 +14,7 @@ class ResourceBase
 {
 public:
   static wchar_t* wszCache;
-  static unsigned int CacheCch;
+  static size_t CacheCch;
 
   int field_4; // 4
   int field_8; // 8

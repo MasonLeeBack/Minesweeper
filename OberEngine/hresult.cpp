@@ -1,14 +1,14 @@
 /*
 
 OberEngine Decompilation
-Original Game: Purble Place
+
+File name:
+  hresult.cpp
 
 */
 
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#include <d3d9.h>
-#include <d3dx9.h>
+#include "stdafx.h"
+#include "hresult.h"
 
 LPCWSTR GetHResult(HRESULT hr)
 {

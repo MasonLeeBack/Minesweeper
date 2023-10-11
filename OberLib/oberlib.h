@@ -8,6 +8,14 @@ Original Game: Purble Place
 #ifndef _OBERLIB_H_
 #define _OBERLIB_H_
 
+// Common includes
+#include <atlbase.h>
+#include <Windows.h>
+#include <d3d9.h>
+#include <d3dx9.h>
+
+// Library includes
+#include "array.h"
 #include "cabinet.h"
 #include "commoncontroller.h"
 #include "dialoghelper.h"
@@ -16,6 +24,8 @@ Original Game: Purble Place
 #include "logger.h"
 #include "serializabledata.h"
 #include "shareddialogs.h"
+#include "sortedlist.h"
+#include "sortedlistw.h"
 #include "sqmtimerecorder.h"
 #include "str.h"
 #include "textureloader.h"

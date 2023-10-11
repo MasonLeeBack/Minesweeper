@@ -1,11 +1,17 @@
 /*
 
 OberEngine Decompilation
-Original Game: Purble Place
+
+File name:
+  resourceanimation.cpp
 
 */
 
+#include "stdafx.h"
 #include "resourceanimation.h"
+
+#include <logger.h>
+#include <utils.h>
 
 AnimationState* ResourceAnimation::CreateAnimationState(bool toDetermine)
 {

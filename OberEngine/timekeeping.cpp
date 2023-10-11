@@ -1,14 +1,15 @@
 /*
 
 OberEngine Decompilation
-Original Game: Purble Place
+
+File name:
+  timekeeping.cpp
 
 */
 
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#include <timeapi.h>
+#include "stdafx.h"
 #include "timekeeping.h"
+#include <logger.h>
 
 bool Timekeeping::Check30FPS()
 {

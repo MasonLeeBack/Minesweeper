@@ -1,5 +1,13 @@
+/*
 
-#include <string.h>
+OberEngine Decompilation
+
+File name:
+  resourcebase.cpp
+
+*/
+
+#include "stdafx.h"
 #include "resourcebase.h"
 
 unsigned int ResourceBase::GetPurgeTimeout()

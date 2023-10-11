@@ -1,11 +1,20 @@
 /*
 
 OberEngine Decompilation
-Original Game: Purble Place
+
+File name:
+  rendermanager.cpp
 
 */
 
+#include "stdafx.h"
 #include "rendermanager.h"
+#include "textrenderer.h"
+#include "userinterface.h"
+#include "engine.h"
+
+#include "xmlmanager.h"
+#include <logger.h>
 
 Material* RenderManager::GetMaterial(int index)
 {
@@ -56,6 +65,66 @@ void RenderManager::MarkSceneDirty()
 {
   m_bSceneDirty = true;
   m_bRenderScene = true;
+}
+
+void RenderManager::ReleaseDefaultResources()
+{
+  g_pTextRenderer->PrepReset();
+
+  if (m_MaterialAlpha1) {
+    m_MaterialAlpha1->PrepReset();
+  }
+
+  if (m_MaterialAlpha2) {
+    m_MaterialAlpha2->PrepReset();
+  }
+
+  if (m_MateralAdditive) {
+    m_MateralAdditive->PrepReset();
+  }
+
+  if (m_RenderTarget) {
+    m_RenderTarget->Release();
+    m_RenderTarget = 0;
+  }
+
+  if (m_RenderTarget2) {
+    m_RenderTarget2->Release();
+    m_RenderTarget2 = 0;
+  }
+
+  if (m_CachedBackBuffer) {
+    m_CachedBackBuffer->Release();
+    m_CachedBackBuffer = 0;
+  }
+}
+
+void RenderManager::ReleaseAllResources()
+{
+  ReleaseDefaultResources();
+  g_pResourceManager->ReleaseDeviceDependentResources();
+
+  if (m_MaterialAlpha1) {
+    delete m_MaterialAlpha1;
+  }
+
+  if (m_MaterialAlpha2) {
+    delete m_MaterialAlpha2;
+  }
+
+  if (m_MateralAdditive) {
+    delete m_MateralAdditive;
+  }
+
+  if (m_OffscreenTarget) {
+    m_OffscreenTarget->Release();
+    m_OffscreenTarget = 0;
+  }
+
+  if (m_Direct3D) {
+    m_Direct3D->Release();
+    m_Direct3D = 0;
+  }
 }
 
 void RenderManager::SetBack(const wchar_t* xmlFileName)
@@ -132,9 +201,12 @@ bool RenderManager::SetResolution(unsigned int width, unsigned int height)
     return true;
 
   if (m_bHighDPI) {
-    // These *were* doubles but that's not right
+    // These *were* assigned as doubles but that's not right
     m_RenderScaleX = 1.0f;
     m_RenderScaleY = 1.0f;
+  }
+  else {
+
   }
 
   m_BaseNode->SetSize(width, height);
@@ -156,6 +228,18 @@ bool RenderManager::SetResolution(unsigned int width, unsigned int height)
   m_bRenderScene = true;
 
   return true;
+}
+
+bool RenderManager::FlushDefaultTextures()
+{
+  LOG(2u, L"FlushDefaultTextures()");
+  ReleaseDefaultResources();
+  return RecreateDefaultResources();
+}
+
+bool RenderManager::Reset()
+{
+  return false;
 }
 
 void RenderManager::SaveBackBuffer()
@@ -196,11 +280,72 @@ void RenderManager::UnregisterTopLevelNode(NodeBase* node)
 
 bool RenderManager::Initialize(const RenderInitializeOptions* options)
 {
-  RenderInitializeOptions* op = new RenderInitializeOptions;
-  if (op)
-  {
+  RenderInitializeOptions* op = new RenderInitializeOptions{};
+  m_InitializeOptions = op;
+  memcpy(op, options, sizeof(RenderInitializeOptions));
 
+  LOG(2u, L"Initializing the text renderer");
+
+  TextRenderer* tr = new TextRenderer();
+  g_pTextRenderer = tr;
+
+  if (!RecreateAllResources(0) && m_EngineState != OUTOFVIDEOMEMORY) {
+    LOG(2u, L"RecreateAllResources() failed");
+    return false;
   }
+
+  if (!g_pTextRenderer->Initialize()) {
+    LOG(2u, L"Couldn't create Text Renderer");
+    return false;
+  }
+
+  m_BaseNode = NodeBase::CreateFromType(L"Base", 0, 1);
+
+  LOG(2u, L"Initializing the user interface.");
+
+  UserInterface* ui = new UserInterface();
+  g_pUserInterface = ui;
+
+  ui->SetLayoutResolution(
+    m_InitializeOptions->m_RenderWidth / (g_bDoubleDPI + 1),
+    m_InitializeOptions->m_RenderHeight / (g_bDoubleDPI + 1));
+
+  ui->SetLayoutOffsetRect(
+    0,
+    0,
+    m_InitializeOptions->m_RenderWidth / (g_bDoubleDPI + 1),
+    m_InitializeOptions->m_RenderHeight / (g_bDoubleDPI + 1));
+
+  m_BaseNode->SetAccessible(true, 0x3Bu);
+
+  m_BaseNode->SetSize(
+    m_InitializeOptions->m_RenderWidth / (g_bDoubleDPI + 1),
+    m_InitializeOptions->m_RenderHeight / (g_bDoubleDPI + 1));
+
+  m_Direct3D->Clear(0, 0, 1, 0, 1.0, 0);
+
+  XmlNode* xmlFile = g_pXmlManager->GetXml(L"engine.xml");
+  if (xmlFile) {
+    g_bLogFillRate = xmlFile->GetXmlInt(L"/LogFillRate", -1) > 0;
+    m_bForceFilter = xmlFile->GetXmlInt(L"/ForceFilter", -1) > 0;
+  }
+
+  int* engineState = &m_EngineState;
+  if (!*engineState)
+    *engineState = UNK_4096;
+
+  SetDPIFromWindowSize();
+
+  return true;
+}
+
+void RenderManager::CreateCorrectMaterials()
+{
+  m_MaterialAlpha1 = new MaterialAlpha();
+  m_MaterialAlpha2 = new MaterialAlpha();
+  CheckAllocation(m_MaterialAlpha2);
+  m_MateralAdditive = new MaterialAdditive();
+  CheckAllocation(m_MateralAdditive);
 }
 
 void RenderManager::SetDeviceLost()

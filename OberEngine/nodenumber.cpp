@@ -5,6 +5,7 @@ Original Game: Purble Place
 
 */
 
+#include "stdafx.h"
 #include "nodenumber.h"
 
 NodeNumber::NodeNumber()
@@ -28,10 +29,10 @@ void NodeNumber::Cleanup()
   unsigned int i = 0;
   if (m_Numbers.count != 0) {
     do {
-      NodeBase* node = m_Numbers.field_C[i];
+      NodeBase* node = m_Numbers.data[i];
       if (node) {
         node->DeleteSelf();
-        m_Numbers.field_C[i];
+        m_Numbers.data[i];
       }
       ++i;
     } while ( i < m_Numbers.count );

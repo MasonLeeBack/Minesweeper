@@ -12,11 +12,19 @@ Original Game: Purble Place
 
 namespace CabLoader {
   class CabStream {
-    Str streamString;
+  public:
+    Str streamName;
 
+
+    bool bSomething1;
+    bool bSomething2;
   };
 
   void StaticExit();
+
+  CabStream* FindStreamNamed(const Str& streamName);
+  void RegisterCabStream(CabStream* stream);
+  void UnregisterCabStream(CabStream* stream);
 }
 
 #endif // _CABINET_H_

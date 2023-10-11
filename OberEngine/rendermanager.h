@@ -1,14 +1,15 @@
 /*
 
 OberEngine Decompilation
-Original Game: Purble Place
+
+File name:
+  rendermanager.h
 
 */
 
 #ifndef _RENDERMANAGER_H_
 #define _RENDERMANAGER_H_
 
-#include <d3d9.h>
 #include "material.h"
 #include "nodesprite.h"
 
@@ -26,6 +27,7 @@ class RenderManager
     OUTOFVIDEOMEMORY = 257,
     SWITCHTOCURRENTMONITOR = 258,
     DEVICELOST = 260,
+    UNK_4096 = 4096, // Initialized?
   };
 
 public:
@@ -62,7 +64,7 @@ public:
   int field_78; // 0x78
   IDirect3DSurface9* m_RenderTarget; // 0x7C
   IDirect3DSurface9* m_RenderTarget2; // 0x80
-  int field_84; // 0x84
+  IDirect3DSurface9* m_OffscreenTarget; // 0x84
   bool field_88; // 0x88
   bool m_bDeviceLost; // 0x89;
   bool field_8A; // 0x8A
@@ -78,6 +80,9 @@ public:
   void MarkDeviceForRecreate();
   void MarkSceneDirty();
 
+  void ReleaseDefaultResources();
+  void ReleaseAllResources();
+
   void SetBack(const wchar_t* xmlFile);
   void SetBackground(bool bClearCustom, unsigned int color);
   void SetEngineState(EngineState state);
@@ -88,10 +93,13 @@ public:
   void RegisterTopLevelNode(NodeBase* node);
 
   bool SetResolution(unsigned int width, unsigned int height);
-
+  bool FlushDefaultTextures();
+  bool Reset();
   void SaveBackBuffer();
   void UnregisterTopLevelNode(NodeBase* node);
   bool Initialize(const RenderInitializeOptions* options);
+
+  void CreateCorrectMaterials();
 
   void SetDeviceLost();
   void SetOutOfVideoMemory();

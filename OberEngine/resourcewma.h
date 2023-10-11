@@ -1,7 +1,9 @@
 /*
 
 OberEngine Decompilation
-Original Game: Purble Place
+
+File name:
+  resourcewma.h
 
 */
 
@@ -12,7 +14,9 @@ Original Game: Purble Place
 
 class ResourceWMA : public ResourceSound
 {
-
+public:
+  bool Recreate();
+  bool LoadAsNeeded();
 };
 
 #endif // _RESOURCEWMA_H_

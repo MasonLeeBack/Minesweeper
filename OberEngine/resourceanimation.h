@@ -1,7 +1,9 @@
 /*
 
 OberEngine Decompilation
-Original Game: Purble Place
+
+File name:
+  resourceanimation.h
 
 */
 

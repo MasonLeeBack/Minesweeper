@@ -1,10 +1,13 @@
 /*
 
 OberEngine Decompilation
-Original Game: Purble Place
+
+File name:
+  resourcesound.cpp
 
 */
 
+#include "stdafx.h"
 #include "resourcesound.h"
 
 ResourceSound::ResourceSound()

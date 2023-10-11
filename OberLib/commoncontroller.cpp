@@ -5,10 +5,13 @@ Original Game: Purble Place
 
 */
 
-#include <Windows.h>
+#include "oberlib.h"
 #include <Xinput.h>
 
-#include "commoncontroller.h"
+CommonControllerThread::CommonControllerThread(HWND hWnd, int a2, IControllerInterface* a3)
+{
+  m_pController = new CommonController(hWnd, a2, a3);
+}
 
 CommonControllerThread::~CommonControllerThread()
 {

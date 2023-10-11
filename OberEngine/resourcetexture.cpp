@@ -1,10 +1,13 @@
 /*
 
 OberEngine Decompilation
-Original Game: Purble Place
+
+File name:
+  resourcetexture.cpp
 
 */
 
+#include "stdafx.h"
 #include "resourcetexture.h"
 
 ResourceTexture::ResourceTexture()

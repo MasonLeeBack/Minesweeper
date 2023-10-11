@@ -1,14 +1,16 @@
 /*
 
 OberEngine Decompilation
-Original Game: Purble Place
+
+File name:
+  tip.h
 
 */
 
 #ifndef _TIP_H_
 #define _TIP_H_
 
-#include "nodebase.h"
+#include "event.h"
 
 class Tip
 {
@@ -17,7 +19,7 @@ public:
 
   };
 
-  Tip(NodeBase* base);
+  Tip(class NodeBase* base);
   ~Tip();
 
   void Arrange();
@@ -26,7 +28,7 @@ public:
   void Show();
   void Close(bool a1);
 
-  void HandleEvent(struct Event* a1);
+  void HandleEvent(Event* a1);
   bool Initialize(const TipSource* a1, bool a2);
 };
 

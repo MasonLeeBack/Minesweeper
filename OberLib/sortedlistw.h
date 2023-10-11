@@ -3,6 +3,8 @@
 OberEngine Decompilation
 Original Game: Purble Place
 
+// Sorted by WCHAR list
+
 */
 
 #ifndef _SORTEDLISTW_H_

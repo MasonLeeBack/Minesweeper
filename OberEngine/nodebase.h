@@ -1,18 +1,22 @@
 /*
 
- OberEngine Decompilation
-Original Game: Purble Place
+OberEngine Decompilation
+
+File name:
+  nodebase.h
 
 */
 
 #ifndef _NODEBASE_H_
 #define _NODEBASE_H_
 
-#include <OberLib/array.h>
-#include <OberLib/xmlnode.h>
-#include "animationdescriptor.h"
-#include "tip.h"
+#include <array.h>
+#include <xmlnode.h>
 #include "event.h"
+#include "tip.h"
+#include "animationdescriptor.h"
+
+#define NODEBASE_TYPE 0x6
 
 enum NodeType {
   NODE_0,
@@ -23,6 +27,13 @@ enum NodeType {
 class NodeBase
 {
 public:
+  typedef NodeBase* (*CreateFunction)(unsigned int*);
+  struct RegisteredType {
+    wchar_t m_Name[0x28];
+    // Callback function for creating a new node
+    CreateFunction m_CreateFunction;
+  };
+  static Array<NodeBase::RegisteredType> m_TypeList;
   static unsigned int* m_RenderLayerNodeCount; // static variable, 01087504
   static bool m_RenderLayerNodeCountInitialized; // static variable, 0108751C
 
@@ -46,7 +57,7 @@ public:
   unsigned int m_BBoxY1; // 0x34
 
   Array<NodeBase*> m_Children; // 0x48 .. 0x54
-  // Array<noIdea> m_Unknown; // 0x58 .. 0x64
+  Array<int> m_Unknown; // 0x58 .. 0x64
 
   unsigned short* m_Name; // 0x68
 
@@ -65,7 +76,9 @@ public:
 
   unsigned int m_TabIndex; // 0xA0
 
-  Tip* m_Tip; // 0xA4
+  class Tip* m_Tip; // 0xA4
+
+  SortedListI<AnimationState*> m_AnimationStates; // 0xA8 .. 0xB4
 
   int m_LayoutLocationX; // 0xB8
   int m_LayoutLocationY; // 0xBC
@@ -80,15 +93,16 @@ public:
   void DestroyTip();
   void HideTip(bool bHide);
 
-  void SetAnimationReverse(bool bReversed);
+  void SetAnimationReverse(unsigned int animationID, bool bReversed);
   void SetAnimationTime(unsigned int animationID, float time);
   void SetAnimationTimeToEnd(unsigned int animationID);
+  AnimationState* GetAnimationState(unsigned int animationID);
 
   void StopAnimation(unsigned int animationID);
   void CompleteAnimation(unsigned int animationID, bool a2);
 
   void SetMaterial(unsigned int materialID);
-  void SetMaterial(struct Material* material);
+  void SetMaterial(class Material* material);
 
   void SetName(unsigned short* name);
 
@@ -112,6 +126,7 @@ public:
   void Update(float timeDelta);
   void UpdateChildren(float timeDelta);
   void UpdateZero();
+  void UpdateCurrentPositions();
 
   void HandleEvent(Event* event);
   void HandleEventRecursive(Event* event);
@@ -130,6 +145,8 @@ public:
 
   bool Load(XmlNode* xmlNode);
 
+  static NodeBase* CreateNode(unsigned int* nodeType);
+  static void RegisterNodeType(const wchar_t* name, CreateFunction createFunction);
   static void Register();
   static int GetRenderLayerIsUsed(unsigned int renderLayer);
 

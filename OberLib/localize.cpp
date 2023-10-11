@@ -13,7 +13,7 @@ Original Game: Purble Place
 
 wchar_t g_wSeparator = '|';
 
-wchar_t* __stdcall LocalizeMessageV(wchar_t* Source, va_list* Arguments)
+wchar_t* LocalizeMessageV(wchar_t* Source, va_list* Arguments)
 {
   size_t length;
   HRSRC hResource;

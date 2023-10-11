@@ -18,8 +18,9 @@ public:
   unsigned int count;
   unsigned int field_4;
   unsigned int field_8;
-  T* field_C;
+  T* data;
 
+  Array<T>();
   Array<T>(unsigned int count);
   ~Array<T>();
 
@@ -35,21 +36,33 @@ public:
 
 #endif // _ARRAY_H_
 
+// I see no mention of this constructor
+// ANYWHERE, but VS will complain if we
+// don't have it.
+template<typename T>
+inline Array<T>::Array()
+{
+  count = 0;
+  field_4 = 0;
+  field_8 = 10;
+  data = NULL;
+}
+
 template<typename T>
 inline Array<T>::Array(unsigned int size)
 {
   count = 0;
   field_4 = 0;
   field_8 = count;
-  field_C = NULL;
+  data = NULL;
 }
 
 template<typename T>
 inline Array<T>::~Array()
 {
-  if (field_C)
+  if (data)
   {
-    delete[] field_C;
+    delete[] data;
   }
 }
 
@@ -62,17 +75,17 @@ inline int Array<T>::Add(T item)
   if (count > field_4)
   {
     field_4 = field_8 + field_4;
-    v5 = (T*)realloc(field_C, sizeof(T) * field_4);
+    v5 = (T*)realloc(data, sizeof(T) * field_4);
     if (!v5)
     {
       CheckAllocation(0);
       return -1;
     }
 
-    field_C = v5;
+    data = v5;
   }
 
-  memcpy(&field_C[count - 1], &item, sizeof(field_C[count - 1]));
+  memcpy(&data[count - 1], &item, sizeof(data[count - 1]));
   return count - 1;
 }
 
@@ -87,7 +100,7 @@ inline int Array<T>::Find(T item)
   result = 0;
   if (!count)
     return -1;
-  for (i = field_C; *i != item; ++i)
+  for (i = data; *i != item; ++i)
   {
     if (++result >= v2)
       return -1;
@@ -105,15 +118,15 @@ inline void Array<T>::FreeExtra()
   field_4 = count;
   if (v2)
   {
-    v3 = (T*)_realloc(field_C, v2);
+    v3 = (T*)realloc(data, v2);
     if (!v3)
       CheckAllocation(0);
-    field_C = v3;
+    data = v3;
   }
   else
   {
-    _free(field_C);
-    field_C = 0;
+    free(data);
+    data = 0;
   }
 }
 
@@ -124,12 +137,12 @@ inline void Array<T>::Reserve(unsigned int Size)
   T* v4;
 
   if (Size > field_4) {
-    v4 = field_C;
+    v4 = data;
     field_4 = Size;
     v3 = realloc(v4, Size);
     if (!v3)
       CheckAllocation(0);
-    field_C = v3;
+    data = v3;
   }
 }
 
@@ -148,17 +161,17 @@ inline void Array<T>::Insert(unsigned int index, T item)
   {
     v5 = this->field_8 + v4;
     this->field_4 = v5;
-    v6 = (T*)_realloc(this->field_C, sizeof(T) * v5);
+    v6 = (T*)_realloc(this->data, sizeof(T) * v5);
     if (!v6)
     {
       CheckAllocation(0);
       return;
     }
-    this->field_C = v6;
+    this->data = v6;
   }
   for (i = this->count - 1; i > index; *v8 = *(v8 - 1))
-    v8 = &this->field_C[i--];
-  this->field_C[index] = item;
+    v8 = &this->data[i--];
+  this->data[index] = item;
 }
 
 template<typename T>
@@ -187,7 +200,7 @@ inline unsigned int Array<T>::Remove(unsigned int index)
   {
     do
     {
-      field_C[v2] = field_C[v2 + 1];
+      data[v2] = data[v2 + 1];
       ++v2;
       result = count - 1;
     } while (v2 < result);
