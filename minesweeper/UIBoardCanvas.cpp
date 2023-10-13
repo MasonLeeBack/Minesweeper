@@ -10,6 +10,9 @@ File name:
 #include "Game.h"
 #include "UIBoardCanvas.h"
 
+#include <gameaudio.h>
+#include <logger.h>
+
 void UIBoardCanvas::PlayTileRevealSound(int numTilesRevealed)
 {
   if (numTilesRevealed >= 10 && g_Game->unknownVariable) {
