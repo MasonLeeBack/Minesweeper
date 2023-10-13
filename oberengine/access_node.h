@@ -10,8 +10,11 @@ File name:
 #ifndef _ACCESS_NODE_H_
 #define _ACCESS_NODE_H_
 
-class Access_Node {
+#include <oleacc.h>
 
+class Access_Node : IAccessible {
+public:
+  STDMETHODIMP accDoDefaultAction(VARIANT varChild) override;
 };
 
 #endif // _ACCESS_NODE_H_
