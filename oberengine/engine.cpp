@@ -10,6 +10,7 @@ File name:
 #include "stdafx.h"
 #include "engine.h"
 #include "rendermanager.h"
+#include "timekeeping.h"
 
 bool g_bMediaCenter = false;
 bool g_bDoubleDPI = false;
@@ -83,4 +84,9 @@ void SetDPIFromWindowSize()
       Engine_SetDPIInternal(false);
     }
   }
+}
+
+void Engine_ResetTimer()
+{
+  Timekeeping::ResetTimers();
 }

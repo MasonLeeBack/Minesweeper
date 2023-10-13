@@ -27,4 +27,6 @@ public:
   int GetSplashTextFontSize();
 };
 
+void Engine_ResetTimer();
+
 #endif // _ENGINE_H_
