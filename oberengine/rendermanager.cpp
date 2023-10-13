@@ -26,6 +26,25 @@ Material* RenderManager::GetMaterial(int index)
   return m_Materials[aIndex];
 }
 
+MaterialType RenderManager::MaterialClassFromPtr(Material* material)
+{
+  MaterialType type = UNKNOWN_MATERIAL;
+  
+  if (material == m_MaterialAlpha1) {
+    return MATERIAL_ALPHA1;
+  }
+
+  if (material == m_MaterialAlpha2) {
+    return MATERIAL_ALPHA2;
+  }
+
+  if (material == m_MateralAdditive) {
+    return MATERIAL_ADDITIVE;
+  }
+
+  return type;
+}
+
 int RenderManager::CreateCachedBackBuffer()
 {
   return 0;
@@ -144,7 +163,23 @@ void RenderManager::SetBack(const wchar_t* xmlFileName)
       xmlFile = g_pXmlManager->GetXml(xmlFileName);
 
       if (xmlFile) {
+        wchar_t* anchor = xmlFile->GetXmlStringAlloc(L"/Anchor");
 
+        if (anchor) {
+          if (_wcsicmp(anchor, L"center"))
+          {
+            if (_wcsicmp(anchor, L"lowerleft"))
+              m_Anchor = _wcsicmp(anchor, L"upperleft") != 0 ? 0 : 2;
+            else
+              m_Anchor = 1;
+          }
+          else
+          {
+            m_Anchor = 0;
+          }
+        }
+
+        delete[] anchor;
       }
 
     }

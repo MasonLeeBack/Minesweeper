@@ -13,6 +13,13 @@ File name:
 #include "material.h"
 #include "nodesprite.h"
 
+enum MaterialType {
+  UNKNOWN_MATERIAL,
+  MATERIAL_ALPHA1,
+  MATERIAL_ALPHA2,
+  MATERIAL_ADDITIVE
+};
+
 struct RenderInitializeOptions {
   HWND m_hWnd = NULL;
   int m_RenderWidth = 0;
@@ -27,6 +34,8 @@ class RenderManager
     OUTOFVIDEOMEMORY = 257,
     SWITCHTOCURRENTMONITOR = 258,
     DEVICELOST = 260,
+    INTERNALDRIVERERROR = 272,
+    DEVICEREMOVED = 320,
     UNK_4096 = 4096, // Initialized?
   };
 
@@ -72,6 +81,7 @@ public:
   int m_EngineState; // 0x8C
 
   Material* GetMaterial(int index);
+  MaterialType MaterialClassFromPtr(Material* material);
   int CreateCachedBackBuffer();
   HMONITOR GetAdapterMonitor();
   void GetMaxTextureSize(int* width, int* height);
