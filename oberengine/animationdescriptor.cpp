@@ -19,3 +19,9 @@ AnimationState* AnimationDescriptor::CreateState(bool a1)
 
   return newState;
 }
+
+void AnimationDescriptor::AddAnimator(Animator_Base* animator, Affector_Base* affector)
+{
+  animators.Add(animator);
+  affectors.Add(affector);
+}
