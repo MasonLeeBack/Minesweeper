@@ -24,6 +24,8 @@ enum NodeType {
   NODE_2,
 };
 
+enum MaterialType;
+
 class NodeBase
 {
 public:
@@ -85,7 +87,7 @@ public:
   unsigned int m_LayoutSizeX; // 0xC0
   unsigned int m_LayoutSizeY; // 0xC4
 
-  // MaterialType material; // 0xFC
+  MaterialType m_Material; // 0xFC
 
   unsigned int GetTabIndex();
 
@@ -98,10 +100,11 @@ public:
   void SetAnimationTimeToEnd(unsigned int animationID);
   AnimationState* GetAnimationState(unsigned int animationID);
 
+  void ResumeAnimation(unsigned int animationID);
   void StopAnimation(unsigned int animationID);
   void CompleteAnimation(unsigned int animationID, bool a2);
 
-  void SetMaterial(unsigned int materialID);
+  void SetMaterial(MaterialType materialType);
   void SetMaterial(class Material* material);
 
   void SetName(unsigned short* name);

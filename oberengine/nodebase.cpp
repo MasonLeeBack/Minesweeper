@@ -97,11 +97,24 @@ AnimationState* NodeBase::GetAnimationState(unsigned int animationID)
   return NULL;
 }
 
+void NodeBase::ResumeAnimation(unsigned int animationID)
+{
+  AnimationState* state;
+  if (m_AnimationStates.TryGet(animationID, &state)) {
+    if (state->field_10)
+      state->Reset();
+
+    state->SetPlaying(true);
+  }
+  else {
+    LOG(200, L"Cannot set non existing animation: %d (type : %d)", animationID, GetHandleType(animationID));
+  }
+}
+
 void NodeBase::StopAnimation(unsigned int animationID)
 {
   AnimationState* state;
-  if (m_AnimationStates.TryGet(animationID, &state))
-  {
+  if (m_AnimationStates.TryGet(animationID, &state)) {
     state->SetPlaying(false);
   }
   else {
@@ -109,14 +122,25 @@ void NodeBase::StopAnimation(unsigned int animationID)
   }
 }
 
-void NodeBase::SetMaterial(unsigned int materialID)
+void NodeBase::CompleteAnimation(unsigned int animationID, bool a2)
 {
-#pragma error unimplemented
+  AnimationState* state;
+  if (m_AnimationStates.TryGet(animationID, &state)) {
+    state->Complete(a2);
+  }
+  else {
+    LOG(200, L"Cannot set non existion animation: %d (type : %d)", animationID, GetHandleType(animationID));
+  }
+}
+
+void NodeBase::SetMaterial(MaterialType materialType)
+{
+  m_Material = materialType;
 }
 
 void NodeBase::SetMaterial(Material* material)
 {
-#pragma error unimplemented
+  m_Material = g_pRenderManager->MaterialClassFromPtr(material);
 }
 
 void NodeBase::SetName(unsigned short* name)
