@@ -11,63 +11,71 @@ File name:
 #define _GAME_H_
 
 #include "Minesweeper_const.h"
+#include "GameStats.h"
 
-enum EGameState {
-  GAMESTATE_NONE = 0,
-  GAMESTATE_PLAYING = 1,
-  GAMESTATE_2 = 2,
-  GAMESTATE_3 = 3,
-  GAMESTATE_4 = 4,
+enum class EGameState {
+  None = 0,
+  Playing = 1,
+  Done = 2,
+  Won = 3, // win animation
+  Lost = 4, // lose animation
 };
 
 enum ESound {
 
 };
 
+// size: 0xE0 (224)
 class Game
 {
 public:
-  struct NodeBase* baseScene; // 2
-  struct UIBoardCanvas* canvas; // 3
-  class Board* board; // 4
-  struct XmlNode* someXmlNode; // 5
-
-  int winLoseDialogX; // 8
-  int winLoseDialogY; // 9
-
-  EGameState gameState; // 10
+  struct NodeBase* m_pBaseScene; // 0x08
+  struct UIBoardCanvas* m_pCanvas; // 0x0C
+  class Board* m_pBoard; // 0x10
+  struct XmlNode* m_pBaseXmlNode; // 0x14
 
   float unknownFloat; // 11
 
-  int boardStyleIndex; // 12
-  int gameStyleIndex; // 13
+  bool field_18; // 0x18
+  bool m_bCanSetAnimations; // 0x19
+  bool m_bSoundEnabled; // 0x1A
+  bool m_bAnimationsEnabled; // 0x1B
+  bool m_bQuestionMarksEnabled; // 0x1C
+  bool m_bTipsEnabled; // 0x1D
+  bool m_bUserPrefersKeyboard; // 0x1E (might be larger)
 
-  int unknownVariable; // 24
-  int bCanSetAnimations; // 25
-  int bSoundEnabled; // 26
-  int bAnimationsEnabled; // 27
-  int bQuestionMarksEnabled; // 28
-  int bTipsEnabled; // 29
-  int bUserPrefersKeyboard; // 30 (might be larger)
+  int m_WinLoseDialogX; // 0x20
+  int m_WinLoseDialogY; // 0x24
 
-  GameStats* stats; // 42
+  EGameState m_GameState; // 0x28
 
-  EDifficulty preferredDifficulty; // 50
-  int customWidth; // 51
-  int customHeight; // 52
-  int customMines; // 53
+  int m_BoardStyleIndex; // 0x30
+  int m_GameStyleIndex; // 0x34
 
-  class CSQMTimeRecorder* timeRecorder; // 152
+  Array<XmlNode*> m_pBoardStyles; // 0x58
 
-  class GameStats* gameStats; // 168 (is this a pointer or embedded?)
+  Array<XmlNode*> m_pGameStyles; // 0x88
 
-  int autoContinueSaveGames; // 194
-  int firstPlay; // 195
-  int autoSaveGameOnExit; // 196
+  class CSQMTimeRecorder* m_pTimeRecorder; // 0x98
 
-  int bReadyForInput; // 216
+  GameStats m_GameStats; // 0xA8
 
-  bool bTimerEnabled; // 218
+  bool field_C0; // 0xC0
+  bool m_bUseRandomArt; // 0xC1
+  bool m_bAutoContinueSaveGames; // 0xC2
+  bool m_bFirstPlay; // 0xC3
+  bool m_bAutoSaveGameOnExit; // 0xC4
+  bool field_C5; // 0xC5
+
+  EDifficulty m_Difficulty; // 0xC8
+
+  int m_CustomWidth; // 0xCC
+  int m_CustomHeight; // 0xD0
+  int m_CustomMines; // 0xD4
+
+  int m_bReadyForInput; // 0xD8
+  bool field_D9; // 0xD9
+  bool m_bTimerEnabled; // 0xDA
 
   void PlaySound(ESound sound, int volume);
   bool CanSetAnimationsEnabled();

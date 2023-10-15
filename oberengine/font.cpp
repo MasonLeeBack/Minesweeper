@@ -99,3 +99,13 @@ BOOL Font::VerifyPow2(unsigned int num)
 {
   return num == (num & -num);
 }
+
+void Font::MakeNextLargerPow2(unsigned int *num)
+{
+  unsigned int i;
+
+  for (i = 1; i < *num; i *= 2)
+    ;
+
+  *num = i;
+}

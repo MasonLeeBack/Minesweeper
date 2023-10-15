@@ -13,6 +13,12 @@ HighScore::HighScore()
   _time64(&m_Time);
 }
 
+HighScore::HighScore(int score)
+{
+  m_Score = 0;
+  _time64(&m_Time);
+}
+
 HighScore::~HighScore()
 {
 }

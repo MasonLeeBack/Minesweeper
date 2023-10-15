@@ -10,11 +10,11 @@ Minesweeper Decompilation
 int EDifficultyToWidth(EDifficulty difficulty)
 {
   switch (difficulty) {
-    case DIFFICULTY_BEGINNER:
+    case EDifficulty::Beginner:
       return 9;
-    case DIFFICULTY_INTERMEDIATE:
+    case EDifficulty::Intermediate:
       return 16;
-    case DIFFICULTY_ADVANCED:
+    case EDifficulty::Advanced:
       return 30;
     default:
       StrErr(Str(L"Invalid difficulty", 1));

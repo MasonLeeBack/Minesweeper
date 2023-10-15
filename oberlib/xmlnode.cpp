@@ -8,6 +8,8 @@ Original Game: Purble Place
 #include <Windows.h>
 #include "xmlnode.h"
 
+#include "array.h"
+
 // XmlString functions
 XmlNode::XmlString::~XmlString()
 {
@@ -130,4 +132,13 @@ wchar_t* XmlNode::GetXmlStringAlloc(const wchar_t* pName)
     return element->GetNodeValue();
   else
     return NULL;
+}
+
+XmlNode* XmlNode::getChild(unsigned int index)
+{
+  if (index < m_Children.count) {
+    return m_Children.data[index];
+  }
+
+  return NULL;
 }

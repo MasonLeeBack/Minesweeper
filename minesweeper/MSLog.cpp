@@ -11,22 +11,24 @@ File name:
 
 const wchar_t* MsLog::MsLogResolver(unsigned int LogType)
 {
-  switch (LogType) {
-  case LOG_GENERAL:
+  ELogType type = (ELogType)LogType;
+
+  switch (type) {
+  case ELogType::General:
     return L"General";
-  case LOG_ERROR:
+  case ELogType::Error:
     return L"Err";
-  case LOG_WARNING:
+  case ELogType::Warning:
     return L"Warn";
-  case LOG_EVENTS:
+  case ELogType::Events:
     return L"Events";
-  case LOG_SCORING:
+  case ELogType::Scoring:
     return L"Scoring";
-  case LOG_BOARDLOGIC:
+  case ELogType::BoardLogic:
     return L"BoardLogic";
-  case LOG_LOADSAVE:
+  case ELogType::LoadSave:
     return L"LoadSave";
-  case LOG_SOUND:
+  case ELogType::Sound:
     return L"Sound";
   }
 

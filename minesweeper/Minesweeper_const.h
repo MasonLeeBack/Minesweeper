@@ -9,11 +9,11 @@ Minesweeper Decompilation
 
 #include <str.h>
 
-enum EDifficulty {
-  DIFFICULTY_BEGINNER = 1,
-  DIFFICULTY_INTERMEDIATE = 2,
-  DIFFICULTY_ADVANCED = 3,
-  DIFFICULTY_CUSTOM = 4,
+enum class EDifficulty {
+  Beginner = 1,
+  Intermediate = 2,
+  Advanced = 3,
+  Custom = 4,
 };
 
 int EDifficultyToWidth(EDifficulty difficulty);
@@ -22,13 +22,13 @@ int EDifficultyToMineCount(EDifficulty difficulty);
 Str* EDifficultyToStr(EDifficulty difficulty);
 Str* EDifficultyToLocalizedStr(EDifficulty difficulty);
 
-enum ETileStatus {
-  TILESTATUS_NONE = 0,
-  TILESTATUS_FLAGGED = 1,
-  TILESTATUS_QUESTION = 2,
-  TILESTATUS_REVEALED = 3,
+enum class ETileStatus {
+  None = 0,
+  Flagged = 1,
+  Question = 2,
+  Revealed = 3,
 };
 
-
+extern int g_iMinesweeperFudge;
 
 #endif // _MINESWEEPER_CONST_H_

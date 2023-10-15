@@ -7,6 +7,8 @@ File name:
 
 */
 
+#include <windows.h>
+
 #include "Game.h"
 #include "UITile.h"
 #include "Board.h"
@@ -17,15 +19,23 @@ File name:
 #include <time.h>
 
 #include <audio.h>
+#include <gameaudio.h>
+#include <engine.h>
 #include <sqmtimerecorder.h>
 #include <dialoghelper.h>
 #include <str.h>
 #include <rendermanager.h>
+#include <userinterface.h>
+#include <localize.h>
 
 Game* g_Game = NULL;
 const wchar_t* gameXml = L"UI\Minesweeper.xml";
 const wchar_t* saveGameFilename = L"Minesweeper.MineSweeperSave-ms";
 int g_RandomSeed;
+
+void Game::PlaySound(ESound sound, int volume)
+{
+}
 
 bool Game::CanSetAnimationsEnabled()
 {
@@ -51,10 +61,10 @@ void Game::ToggleChangeSettingsMenus(bool bEnabled)
 
 void Game::RequestSkipAnimation()
 {
-  if (gameState == GAMESTATE_3 || gameState == GAMESTATE_4 && canvas)
+  if (m_GameState == EGameState::Won || m_GameState == EGameState::Lost && m_pCanvas)
   {
     unknownFloat = 0.0f;
-    canvas->ClearAnimations();
+    m_pCanvas->ClearAnimations();
     GameAudio::StopAllSounds();
   }
 }
@@ -64,11 +74,11 @@ bool Game::RequestFlagToggle()
   NodeBase* focusedNode;
   UITile* tile;
 
-  if (canvas && board && gameState == GAMESTATE_PLAYING) {
+  if (m_pCanvas && m_pBoard && m_GameState == EGameState::Playing) {
     focusedNode = g_pUserInterface->GetCurrentFocus();
 
     if (focusedNode) {
-      tile = canvas->FindTileWithBack(focusedNode);
+      tile = m_pCanvas->FindTileWithBack(focusedNode);
       if (tile) {
         tile->ToggleFlag();
         return true;
@@ -82,22 +92,22 @@ bool Game::RequestFlagToggle()
 void Game::DoNewBoardAnimation()
 {
 
-  if (!bCanSetAnimations || !board || !canvas) {
+  if (!m_bCanSetAnimations || !m_pBoard || !m_pCanvas) {
     return;
   }
 }
 
 int Game::AttemptReveal(int x, int y)
 {
-  return board->AttemptReveal(x, y);
+  return m_pBoard->AttemptReveal(x, y);
 }
 
 void Game::OnSecondElapsed()
 {
   if (g_Game) {
-    if (g_Game->gameState == GAMESTATE_PLAYING) {
-      g_Game->board->TimeElapsed = g_Game->board->TimeElapsed + 1.0f;
-      g_Game->canvas->RefreshLabels();
+    if (g_Game->m_GameState == EGameState::Playing) {
+      g_Game->m_pBoard->m_TimeElapsed = g_Game->m_pBoard->m_TimeElapsed + 1.0f;
+      g_Game->m_pCanvas->RefreshLabels();
       InvalidateRect(g_hWnd, 0, 0);
     }
   }
@@ -105,27 +115,27 @@ void Game::OnSecondElapsed()
 
 void Game::CreateScene()
 {
-  baseScene = NodeBase::CreateFromType(L"Base", 0, 1);
-  if (!baseScene) {
+  m_pBaseScene = NodeBase::CreateFromType(L"Base", 0, 1);
+  if (!m_pBaseScene) {
     SharedDialogs::FatalDialog::Show(0);
   }
   // To do: Determine what this access role is
-  baseScene->SetAccessible(0, 0x3B);
+  m_pBaseScene->SetAccessible(0, 0x3B);
 }
 
 void Game::SetTipsEnabled(bool bEnabled)
 {
-  bTipsEnabled = bEnabled;
+  m_bTipsEnabled = bEnabled;
   if (bEnabled == false)
   {
-    if (canvas)
-      canvas->HideTip();
+    if (m_pCanvas)
+      m_pCanvas->HideTip();
   }
 }
 
 void Game::SetSoundEnabled(bool bEnabled)
 {
-  bSoundEnabled = g_pAudio->GetDS() != NULL && bEnabled;
+  m_bSoundEnabled = g_pAudio->GetDS() != NULL && bEnabled;
   CacheSounds();
 }
 
@@ -143,7 +153,7 @@ void Game::SetTimerEnabled(bool bEnabled)
 
 void Game::SetUserOptionSoundEnabled(bool bEnabled)
 {
-  bSoundEnabled = bEnabled;
+  m_bSoundEnabled = bEnabled;
   SetSoundEnabled(bEnabled);
 }
 
@@ -156,15 +166,15 @@ bool Game::GetClientAreaAnimation()
 
 void Game::RequestSetState(EGameState state)
 {
-  if (canvas)
-    canvas->MakeAllTilesDirty();
+  if (m_pCanvas)
+    m_pCanvas->MakeAllTilesDirty();
 
   switch (state) {
-  case GAMESTATE_PLAYING:
-  case GAMESTATE_2:
+  case EGameState::Playing:
+  case EGameState::Done:
     break;
-  case GAMESTATE_3:
-  case GAMESTATE_4:
+  case EGameState::Won:
+  case EGameState::Lost:
     ToggleChangeSettingsMenus(1);
     break;
   default:
@@ -172,16 +182,16 @@ void Game::RequestSetState(EGameState state)
   }
 
   switch (state) {
-  case GAMESTATE_PLAYING:
-  case GAMESTATE_3: {
-    if (canvas) {
-      canvas->RefreshLabels();
+  case EGameState::Playing:
+  case EGameState::Won: {
+    if (m_pCanvas) {
+      m_pCanvas->RefreshLabels();
       break;
     }
   }
-  case GAMESTATE_2:
+  case EGameState::Done:
     return;
-  case GAMESTATE_4:
+  case EGameState::Lost:
     break;
   default: {
     StrErr(Str(L"Unknown state"), 1); // this may not work
@@ -192,35 +202,66 @@ void Game::RequestSetState(EGameState state)
 
 void Game::freeGameRes(bool bFreeScene)
 {
-  if (board) {
-    delete board;
-    board = NULL;
+  if (m_pBoard) {
+    delete m_pBoard;
+    m_pBoard = NULL;
   }
   if (bFreeScene) {
-    baseScene->DeleteSelf();
+    m_pBaseScene->DeleteSelf();
 
-    if (canvas) {
+    if (m_pCanvas) {
 #error todo
     }
   }
+}
+
+void Game::UpdateMenu()
+{
+  HMENU menu;
+
+  if (m_pBoardStyles.count == 1 && m_pGameStyles.count == 1) {
+    if (g_bDebugEnabled == true) {
+      menu = LoadMenu(g_hInstance, MAKEINTRESOURCE(165))
+    }
+    else {
+      menu = LoadMenu(g_hInstance, MAKEINTRESOURCE(166))
+    }
+  }
+  else {
+    if (g_bDebugEnabled == false) {
+      return;
+    }
+    menu = LoadMenu(g_hInstance, MAKEINTRESOUCE(164))
+  }
+
+  HMENU oldMenu = GetMenu(g_hWnd);
+  DestroyMenu(oldMenu);
+
+  SetMenu(g_hWnd, menu);
+  DrawMenuBar(g_hWnd);
 }
 
 bool Game::InitUi()
 {
   bool result;
 
-  g_iMinesweeperFudge = true;
+  g_iMinesweeperFudge = 1;
   Engine_SetBackMode(1, 0, 1);
   CreateScene();
-  canvas = new UIBoardCanvas();
+  m_pCanvas = new UIBoardCanvas();
 
-  result = canvas->Initialize();
+  result = m_pCanvas->Initialize(
+          m_pBaseXmlNode,
+          m_pBaseScene,
+          m_pBoard,
+          m_pBoardStyles.data[m_BoardStyleIndex],
+          m_pGameStyles.data[m_GameStyleIndex]);
   if (result) {
     wchar_t* local = LocalizeMessage(L"|54922|ACC|Minesweeper//accessibility root node name");
     g_pRenderManager->m_BaseNode->SetAccessName(local);
     LocalFree(local);
-    RequestSetState(GAMESTATE_PLAYING);
-    canvas->Refresh(true);
+    RequestSetState(EGameState::Playing);
+    m_pCanvas->Refresh(true);
     CacheSounds();
 
     result = true;
@@ -229,40 +270,56 @@ bool Game::InitUi()
   return result;
 }
 
+void Game::ResetCanvas()
+{
+  if (m_pCanvas) {
+    m_pCanvas->Reset(
+      m_pBoard,
+      m_pBoardStyles[m_BoardStyleIndex],
+      m_pGameStyles[m_GameStyleIndex],
+      m_pBoard->m_Difficulty,
+      NULL,
+      true
+    );
+
+    m_pCanvas->Refresh(true);
+  }
+}
+
 bool Game::IsReadyForInput()
 {
-  if (gameState != GAMESTATE_PLAYING
-    || board == NULL || board->var_48 || firstPlay == true)
+  if (m_GameState != EGameState::Playing
+    || m_pBoard == NULL || m_pBoard->var_48 || m_bFirstPlay == true)
   {
     return false;
   }
 
-  return bReadyForInput != false;
+  return m_bReadyForInput != false;
 }
 
 void Game::SetAnimationsEnabled(bool bEnabled)
 {
   bool clearAnim;
 
-  bCanSetAnimations = CanSetAnimationsEnabled() && bEnabled;
+  m_bCanSetAnimations = CanSetAnimationsEnabled() && bEnabled;
   if (GetClientAreaAnimation())
-    clearAnim = bCanSetAnimations;
+    clearAnim = m_bCanSetAnimations;
   else
     clearAnim = false;
 
-  bCanSetAnimations = clearAnim;
+  m_bCanSetAnimations = clearAnim;
 
   if (!clearAnim)
   {
-    if (canvas) {
-      canvas->ClearAnimations();
+    if (m_pCanvas) {
+      m_pCanvas->ClearAnimations();
     }
   }
 }
 
 void Game::SetUserOptionAnimationsEnabled(bool bEnabled)
 {
-  bAnimationsEnabled = bEnabled;
+  m_bAnimationsEnabled = bEnabled;
   SetAnimationsEnabled(bEnabled);
 }
 
@@ -288,16 +345,52 @@ void Game::RemoveSavedGame()
 
 void Game::Win()
 {
-  RequestSetState(2);
+  RequestSetState(EGameState::Done);
   RemoveSavedGame();
   UIDialogs::StartWinDialog();
 }
 
 void Game::Lose()
 {
-  RequestSetState(2);
+  RequestSetState(EGameState::Done);
   RemoveSavedGame();
   UIDialogs::StartLoseDialog();
+}
+
+void Game::DisarmBoard()
+{
+  if (m_GameState != EGameState::Playing)
+    return;
+
+  if (m_pBoard->m_Difficulty != EDifficulty::Custom) {
+    m_GameStats.AddNewScore(m_pBoard->m_Difficulty, (int)floorf(m_pBoard->m_TimeElapsed), true);
+    Game::Save(false, false);
+  }
+
+  RequestSetState(EGameState::Won);
+
+  if (field_18) {
+    GameAudio::ForceLoadResource(1, false);
+    Game::PlaySoundW((ESound)1, 100);
+  }
+
+  m_pCanvas->DoDisarmAction();
+}
+
+void Game::ExplodeBoard()
+{
+  if (m_GameState != EGameState::Playing)
+    return;
+
+  if (m_pBoard->m_Difficulty != EDifficulty::Custom)
+
+  if (m_bCanSetAnimations == true) {
+    RequestSetState(EGameState::Lost);
+    m_pCanvas->DoMineExplodeAction();
+  }
+  else {
+    Lose();
+  }
 }
 
 void Game::PrintFatalErrorAndQuit(int errorCode)
@@ -316,18 +409,18 @@ bool Game::SetArt(int boardStyle, int gameStyle, bool bRebuildCanvas)
   int clicked;
 
   // check to see if the art is already set
-  if (gameStyleIndex == gameStyle && boardStyleIndex == boardStyle)
+  if (m_GameStyleIndex == gameStyle && m_BoardStyleIndex == boardStyle)
     return false;
 
-  boardStyleIndex = boardStyle;
-  gameStyleIndex = gameStyle;
+  m_BoardStyleIndex = boardStyle;
+  m_GameStyleIndex = gameStyle;
 
   if (bRebuildCanvas) {
     // Save the state of the clicked variable and restore
     // after rebuilding
-    clicked = board->RevealsAttempted;
+    clicked = m_pBoard->m_RevealsAttempted;
     RebuildCanvas();
-    board->RevealsAttempted = clicked;
+    m_pBoard->m_RevealsAttempted = clicked;
   }
 
   return true;
@@ -353,56 +446,58 @@ bool Game::initLogic(Str gameXml)
 
 Game::Game()
 {
+  m_pTimeRecorder = NULL;
+
   g_Game = this;
 
-  baseScene = NULL;
-  canvas = NULL;
-  board = NULL;
+  m_WinLoseDialogX = -1;
+  m_WinLoseDialogY = -1;
 
-  winLoseDialogX = -1;
-  winLoseDialogY = -1;
+  m_pBoard = NULL;
+  m_pCanvas = NULL;
+  m_pBaseScene = NULL;
 
-  gameState = GAMESTATE_NONE;
+  m_GameState = EGameState::None;
 
-  boardStyleIndex = 0;
-  gameStyleIndex = 0;
+  m_GameStyleIndex = 0;
+  m_GameStyleIndex = 0;
 
   // 197 = 0
-  firstPlay = true;
-  // 193 = 0
-  autoContinueSaveGames = false;
-  autoSaveGameOnExit = false;
+  m_bFirstPlay = true;
+  m_bUseRandomArt = false;
+  m_bAutoContinueSaveGames = false;
+  m_bAutoSaveGameOnExit = false;
   // 192 = 0;
 
   // 47 = 0;
-  unknownVariable = true;
-  bCanSetAnimations = true;
-  bSoundEnabled = true;
-  bAnimationsEnabled = true;
-  bQuestionMarksEnabled = true;
-  bTipsEnabled = true;
-  bUserPrefersKeyboard = false;
+  field_18 = true;
+  m_bCanSetAnimations = true;
+  m_bSoundEnabled = true;
+  m_bAnimationsEnabled = true;
+  m_bQuestionMarksEnabled = true;
+  m_bTipsEnabled = true;
+  m_bUserPrefersKeyboard = false;
 
-  preferredDifficulty = DIFFICULTY_BEGINNER;
-  customWidth = EDifficultyToWidth(preferredDifficulty);
-  customHeight = EDifficultyToHeight(preferredDifficulty);
-  customMines = EDifficultyToMineCount(preferredDifficulty);
+  m_Difficulty = EDifficulty::Beginner;
+  m_CustomWidth = EDifficultyToWidth(m_Difficulty);
+  m_CustomHeight = EDifficultyToHeight(m_Difficulty);
+  m_CustomMines = EDifficultyToMineCount(m_Difficulty);
 
   // figure out this data id
-  timeRecorder->SetDataId(0x17C7u);
+  m_pTimeRecorder->SetDataId(0x17C7u);
 
   Reset(0, 0, 0);
-  RequestSetState(GAMESTATE_NONE);
+  RequestSetState(EGameState::None);
 
-  bReadyForInput = 0;
+  m_bReadyForInput = 0;
   // 217 = 0;
 
-  bTimerEnabled = false;
+  m_bTimerEnabled = false;
 }
 
 void Game::RequestStartNewGame()
 {
-  if (gameState == GAMESTATE_PLAYING && board->RevealsAttempted > 0)
+  if (m_GameState == EGameState::Playing && m_pBoard->m_RevealsAttempted > 0)
     UIDialogs::StartNewGameDialog();
   else
     Reset(1, 0, 1);
@@ -419,10 +514,25 @@ Game* Game::SafeGetSingleton()
   {
     g_Game = new Game();
     if (!g_Game && !g_Game->initLogic(Str(gameXml))) {
-      // make sense of this bologna
       PrintFatalErrorAndQuit(103);
     }
   }
 
   return g_Game;
+}
+
+void Game::AddLoss()
+{
+  float timeElapsed = (floorf(m_pBoard->m_TimeElapsed));
+  m_GameStats.AddNewScore(m_Difficulty, timeElapsed, false);
+}
+
+int Game::GetUnflaggedMineCount()
+{
+  if (m_GameState == EGameState::Won) {
+    return 0;
+  }
+  else {
+    return m_pBoard->m_Mines - m_pBoard->m_FlagsPlaced;
+  }
 }

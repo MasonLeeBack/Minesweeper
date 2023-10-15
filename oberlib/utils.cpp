@@ -23,3 +23,13 @@ void CheckAllocation(void* pPointer)
 #endif
   }
 }
+
+// See if we're in a right-to-left text layout
+// region
+DWORD IsRTL()
+{
+  DWORD pdwDefaultLayout = 0;
+  GetProcessDefaultLayout(&pdwDefaultLayout);
+
+  return pdwDefaultLayout & 1;
+}

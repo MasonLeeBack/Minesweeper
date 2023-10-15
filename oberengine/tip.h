@@ -16,7 +16,8 @@ class Tip
 {
 public:
   struct TipSource {
-
+    NodeBase* parent;
+    wchar_t* sourceXml;
   };
 
   Tip(class NodeBase* base);

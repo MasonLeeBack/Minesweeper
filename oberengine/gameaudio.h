@@ -10,23 +10,17 @@ File name:
 #ifndef _GAMEAUDIO_H_
 #define _GAMEAUDIO_H_
 
-#include <array.h>
-#include "resourcesound.h"
-#include "xmlmanager.h"
-
 namespace GameAudio {
   typedef struct {
 
   } SoundEffect;
-  Array<SoundEffect*> aSoundEffects;
 
   typedef struct {
 
   } MusicStream;
-  Array<MusicStream*> aMusicStreams;
 
   bool ForceLoadResource(unsigned int resID, bool bResetTimer);
-  void LoadGameAudio(XmlNode* xmlFile, bool a2);
+  void LoadGameAudio(class XmlNode* xmlFile, bool a2);
 
   bool Pin(unsigned int resID);
   void Unpin(unsigned int resID);

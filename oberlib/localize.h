@@ -5,12 +5,12 @@ Original Game: Purble Place
 
 */
 
-#ifndef _ENGINE_H_
-#define _ENGINE_H_
+#ifndef _LOCALIZE_H_
+#define _LOCALIZE_H_
 
 #include <stdarg.h>
 
-wchar_t* LocalizeMessageV(wchar_t* Source, va_list* Args);
-wchar_t* LocalizeMessage(wchar_t* Source, ...);
+wchar_t* LocalizeMessageV(const wchar_t* Source, va_list* Args);
+wchar_t* LocalizeMessage(const wchar_t* Source, ...);
 
-#endif // _ENGINE_H_
+#endif // _LOCALIZE_H_

@@ -18,6 +18,7 @@ public:
   __time64_t m_Time;
 
   HighScore();
+  HighScore(int score);
   ~HighScore();
 
   void ToXML(SerialXML* xml);

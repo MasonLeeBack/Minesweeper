@@ -9,19 +9,20 @@ Original Game: Purble Place
 #define _SHAREDDIALOGS_H_
 
 namespace SharedDialogs {
-  class LoadGame {
+  namespace LoadGame {
 
   };
 
-  class ResetStatistics {
+  namespace ResetStatistics {
   
   };
 
   class CorruptSaveDialog {
-
+  public:
+    static void Show();
   };
 
-  class FatalDialog {
+  namespace FatalDialog {
 
   };
 

@@ -71,6 +71,8 @@ private:
   static Array<NodeSprite*> _backSpriteRowBases;
   static Array<NodeSprite*> _accessibilityGroups;
 
+public:
+
   // All member variables
   NodeSprite* m_Highlight;
   NodeSprite* m_Top;
@@ -101,8 +103,6 @@ private:
   int m_ExplosionAnimationId;
   int m_DisarmAnimationId;
   int m_AlphaFadeInAnimationId;
-
-public:
 
   void DestroyBaseNodes();
 

@@ -16,17 +16,17 @@ File name:
 
 class Board {
 public:
-  int Mines;
-  int Height;
-  int Width;
-  int FlagsPlaced;
-  int RevealedSquares;
-  int RevealsAttempted;
-  float TimeElapsed;
-  int Difficulty;
-  int FirstXClickPos;
-  int FirstYClickPos;
-  int RandSeed;
+  int m_Mines;
+  int m_Height;
+  int m_Width;
+  int m_FlagsPlaced;
+  int m_RevealedSquares;
+  int m_RevealsAttempted;
+  float m_TimeElapsed;
+  EDifficulty m_Difficulty;
+  int m_FirstXClickPos;
+  int m_FirstYClickPos;
+  int m_RandSeed;
 
   int var_44;
   int var_48;
@@ -36,9 +36,9 @@ public:
   int var_64;
   int var_68;
 
-  Array<TileAnimationInfo*> BoardAnimations;
-  Array<UITile*> BoardTiles;
-  Array<UITile*> BoardMines;
+  Array<TileAnimationInfo*> m_pBoardAnimations;
+  Array<UITile*> m_pBoardTiles;
+  Array<UITile*> m_pBoardMines;
 
   int GetMineableTileCount(int a1, int a2);
   int AttemptReveal(int x, int y);

@@ -36,7 +36,17 @@ class EngineHandler : public IEngineInterface {
   void UpdateGameCode();
 
   int GetWindowMenu();
+  int GetKeyAcceleratorResId();
   const wchar_t* GetGdfPath();
+
+  void ReportOutOfMemory();
+
+  const wchar_t* GetHelpGUID();
+  GUID* GetRichGameMediaGameID();
+
+  const wchar_t* GetSplashText();
+  const wchar_t* GetSplashTextFont();
+  int GetSplashTextFontSize();
 };
 
 #endif // _MINESWEEPER_H_

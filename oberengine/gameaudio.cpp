@@ -9,10 +9,12 @@ File name:
 
 #include "stdafx.h"
 #include "gameaudio.h"
-
 #include "audio.h"
 #include "engine.h"
 #include "resourcemanager.h"
+
+Array<GameAudio::SoundEffect*> aSoundEffects;
+Array<GameAudio::MusicStream*> aMusicStreams;
 
 bool GameAudio::ForceLoadResource(unsigned int resID, bool bResetTimer)
 {

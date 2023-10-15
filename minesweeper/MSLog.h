@@ -10,15 +10,15 @@ File name:
 #ifndef _MSLOG_H_
 #define _MSLOG_H_
 
-enum ELogType {
-  LOG_GENERAL = 0x10000,
-  LOG_ERROR = 0x20000,
-  LOG_WARNING = 0x40000,
-  LOG_EVENTS = 0x80000,
-  LOG_SCORING = 0x100000,
-  LOG_BOARDLOGIC = 0x200000,
-  LOG_LOADSAVE = 0x400000,
-  LOG_SOUND = 0x800000,
+enum class ELogType {
+  General = 0x10000,
+  Error = 0x20000,
+  Warning = 0x40000,
+  Events = 0x80000,
+  Scoring = 0x100000,
+  BoardLogic = 0x200000,
+  LoadSave = 0x400000,
+  Sound = 0x800000,
 };
 
 class MsLog {

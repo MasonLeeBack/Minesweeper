@@ -24,6 +24,7 @@ class XmlNode {
 
 public:
   SortedListW<XmlString*> m_StringList; // 0x0
+  Array<XmlNode*> m_Children;
   XmlString m_NodeName; // 0x24
   XmlString m_SourceFileName; // 0x34
   XmlString m_NodeValue; // 0x40
@@ -43,6 +44,8 @@ public:
 
   bool GetXmlString(wchar_t* Dest, unsigned int Size, const wchar_t* pName);
   wchar_t* GetXmlStringAlloc(const wchar_t* pName);
+
+  XmlNode* getChild(unsigned int index);
 };
 
 #endif // _XMLNODE_H_

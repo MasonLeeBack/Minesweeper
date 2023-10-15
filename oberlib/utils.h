@@ -9,5 +9,6 @@ Original Game: Purble Place
 #define _UTILS_H_
 
 void CheckAllocation(void* pPointer);
+DWORD IsRTL();
 
 #endif

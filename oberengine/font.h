@@ -39,6 +39,7 @@ public:
   void SetHFont(HFONT font);
 
   BOOL VerifyPow2(unsigned int num);
+  void MakeNextLargerPow2(unsigned int* num);
 };
 
 #endif // _FONT_H_

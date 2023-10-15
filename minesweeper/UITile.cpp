@@ -10,6 +10,9 @@ File name:
 #include "UITile.h"
 #include "Game.h"
 
+#include <userinterface.h>
+#include <commoncontroller.h>
+
 void UITile::DestroyBaseNodes()
 {
   _pLeftShadowBase->DeleteSelf();
@@ -54,7 +57,7 @@ void UITile::HandleEsc()
     _bothButtonsWereDown = false;
     _mouseDownWasCanceled = true;
 
-    canvas = g_Game->canvas;
+    canvas = g_Game->m_pCanvas;
     if (!canvas)
       SharedDialogs::FatalDialog::Show(0);
 

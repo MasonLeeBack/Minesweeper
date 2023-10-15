@@ -10,8 +10,11 @@ File name:
 #ifndef _ENGINE_H_
 #define _ENGINE_H_
 
+typedef void(*timerCallback)();
+
 extern bool g_bDoubleDPI;
 extern int g_bLogFillRate;
+extern HWND g_hWnd;
 
 bool ShouldGoHighDPI(unsigned int w, unsigned int h);
 void SetDPIFromWindowSize();
@@ -28,5 +31,6 @@ public:
 };
 
 void Engine_ResetTimer();
+void Engine_RegisterSecondTimer(timerCallback timer);
 
 #endif // _ENGINE_H_

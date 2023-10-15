@@ -12,11 +12,15 @@ File name:
 #include "rendermanager.h"
 #include "timekeeping.h"
 
+#define TIMER_ID 1024
+
 bool g_bMediaCenter = false;
 bool g_bDoubleDPI = false;
 HWND g_hRenderWindow;
+HWND g_hWnd;
 unsigned int g_uiLayoutX = 800;
 unsigned int g_uiLayoutY = 496;
+timerCallback g_pSecondTimerCallback;
 
 bool Engine_IsMediaCenter()
 {
@@ -89,4 +93,28 @@ void SetDPIFromWindowSize()
 void Engine_ResetTimer()
 {
   Timekeeping::ResetTimers();
+}
+
+void CALLBACK Engine_TimerProc(HWND hWnd, UINT unn1, UINT_PTR unn2, DWORD unn3) {
+  if (g_pSecondTimerCallback && *g_pSecondTimerCallback) {
+    if (!IsIconic(g_hWnd)) {
+      g_pSecondTimerCallback();
+    }
+    else {
+      KillTimer(g_hWnd, TIMER_ID);
+    }
+  }
+}
+
+void Engine_RegisterSecondTimer(timerCallback timer)
+{
+  if (g_pSecondTimerCallback) {
+    g_pSecondTimerCallback = timer;
+    if (!g_pSecondTimerCallback)
+      KillTimer(g_hWnd, TIMER_ID);
+  }
+  else if (timer) {
+    g_pSecondTimerCallback = timer;
+    SetTimer(g_hWnd, TIMER_ID, 1000, Engine_TimerProc);
+  }
 }
