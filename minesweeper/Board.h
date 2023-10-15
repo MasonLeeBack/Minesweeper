@@ -37,8 +37,8 @@ public:
   int var_68;
 
   Array<TileAnimationInfo*> m_pBoardAnimations;
-  Array<UITile*> m_pBoardTiles;
-  Array<UITile*> m_pBoardMines;
+  Array<Array<ETileStatus>*> m_pBoardTiles;
+  Array<Array<bool>*> m_pBoardMines;
 
   int GetMineableTileCount(int a1, int a2);
   int AttemptReveal(int x, int y);

@@ -13,6 +13,11 @@ File name:
 #include "event.h"
 #include <sortedlist.h>
 
+class ITimerEventPrototype {
+
+};
+
+// size: 0x34 (52)
 class Timer {
   SortedListI<Event::RegisteredType> m_EventList; // 0
 

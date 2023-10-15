@@ -13,6 +13,7 @@ File name:
 #include <array.h>
 #include "resourcesound.h"
 
+// size: 0x28 (40)
 class Audio
 {
 public:

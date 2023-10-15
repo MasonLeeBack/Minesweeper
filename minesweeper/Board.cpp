@@ -21,7 +21,7 @@ void Board::ToXML(SerialXML* xmlFile)
   xmlFile->ToXML(m_Mines, L"Mines");
   xmlFile->ToXML(m_Height, L"Height");
   xmlFile->ToXML(m_Width, L"Width");
-  xmlFile->ToXML(m_Difficulty, L"Difficulty");
+  xmlFile->ToXML((int)m_Difficulty, L"Difficulty");
   xmlFile->ToXML(m_TimeElapsed, L"TimeElapsed");
   xmlFile->ToXML(m_FlagsPlaced, L"FlagsPlaced");
   xmlFile->ToXML(m_RevealedSquares, L"RevealedSquares");

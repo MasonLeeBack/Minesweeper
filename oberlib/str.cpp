@@ -14,6 +14,13 @@ Original game: Purble Place
 
 #include "str.h"
 
+Str::Str()
+{
+  m_iLength = 0;
+  m_iCount = 0;
+  m_pStr = NULL;
+}
+
 Str::Str(Str* other)
 {
   // Store the current length in a temporary variable
@@ -283,7 +290,21 @@ void Str::Clear()
   m_iCount = 0;
 }
 
-size_t Str::Format(wchar_t* Format, ...)
+void Str::SetAllocLength(unsigned int length)
+{
+  if (m_iCount <= length) {
+    delete[] m_pStr;
+    m_iCount = length;
+    m_pStr = new wchar_t[length];
+  }
+
+  m_iLength = 0;
+
+  if (m_pStr)
+    *m_pStr = NULL;
+}
+
+size_t Str::Format(const wchar_t* Format, ...)
 {
   size_t count;        // Variable to hold the count of characters needed for the formatted string
   va_list ArgList;  // Variable to hold the argument list
@@ -325,7 +346,7 @@ size_t Str::Format(wchar_t* Format, ...)
   return m_iLength;
 }
 
-size_t Str::AppendF(wchar_t* Format, ...)
+size_t Str::AppendF(const wchar_t* Format, ...)
 {
   size_t count;        // Variable to hold the count of characters needed for the formatted string
   size_t originalLength; // Variable to hold the original length of the string

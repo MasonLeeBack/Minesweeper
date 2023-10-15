@@ -58,6 +58,10 @@ public:
   unsigned int m_BBoxX1; // 0x30
   unsigned int m_BBoxY1; // 0x34
 
+  bool field_3C; // 0x3C
+
+  bool field_44; // 0x44
+
   Array<NodeBase*> m_Children; // 0x48 .. 0x54
   Array<int> m_Unknown; // 0x58 .. 0x64
 

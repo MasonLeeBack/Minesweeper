@@ -17,6 +17,7 @@ public:
   size_t m_iCount; // 1
   wchar_t* m_pStr; // 2
 
+  Str();
   Str(Str* other);
   Str(const wchar_t* other);
   Str(wchar_t* Source, size_t Length);
@@ -33,9 +34,10 @@ public:
   bool CIEquals(const Str* other);
 
   void Clear();
+  void SetAllocLength(unsigned int length);
 
-  size_t Format(wchar_t* Format, ...);
-  size_t AppendF(wchar_t* Format, ...);
+  size_t Format(const wchar_t* Format, ...);
+  size_t AppendF(const wchar_t* Format, ...);
 
   Str* SubString(Str* result, size_t startIndex, size_t length);
   static Str* FromNumber(int n);
